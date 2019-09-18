@@ -6,4 +6,5 @@
     <string name="allow_location_permission">Allow Location Permission</string>
     <string name="str_enable_gps">Enable GPS</string>
     <string name="str_tracking_location">Tracking Location</string>
+    <string name="str_playservice_not_available">PlayService is not availabel</string>
 </resources>

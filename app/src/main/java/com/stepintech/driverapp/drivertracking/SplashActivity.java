@@ -16,6 +16,12 @@ public class SplashActivity  extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        if(!Utils.isGooglePlayServicesAvailable(this)){
+            Utils.showToast(this , getString(R.string.str_playservice_not_available));
+            return;
+        }
+
         mBtnNavigate = findViewById(R.id.btn_navigate);
         mBtnNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
