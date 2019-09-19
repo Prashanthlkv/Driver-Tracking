@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.SystemClock;
 
 import static com.stepintech.driverapp.drivertracking.Constants.ALARM_INTERVAL;
@@ -49,9 +50,21 @@ class AlarmHandler {
         mPendingIntent = PendingIntent.getBroadcast(mContext,
                 0, intent, 0);
         if (alarmManager != null) {
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            /*alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                     SystemClock.elapsedRealtime() + ALARM_INTERVAL,
-                    ALARM_INTERVAL, mPendingIntent);
+                    ALARM_INTERVAL, mPendingIntent);*/
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + ALARM_INTERVAL,
+                        mPendingIntent);
+            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            {
+                alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + ALARM_INTERVAL, mPendingIntent);
+            }else {
+                alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + ALARM_INTERVAL, mPendingIntent);
+            }
         }
 
     }

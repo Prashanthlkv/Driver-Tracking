@@ -40,7 +40,8 @@
             android:launchMode="singleTask"/>
 
         <service android:name=".LocationTrackerService" android:exported="false" android:enabled="true"
-            android:foregroundServiceType="location" android:stopWithTask="false"/>
+            android:foregroundServiceType="location" android:stopWithTask="false"
+            android:process=":stepin_process"/>
 
         <receiver android:name=".LocationTrackerStatusReceiver" android:enabled="true" android:exported="false">
             <intent-filter>
