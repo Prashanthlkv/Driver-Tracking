@@ -15,9 +15,16 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 final class Utils {
 
-    static boolean isLocationPermissionGranted(Context context){
-        return ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    static boolean isBackgroundLocationPermissionGranted(Context context){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            return ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(context,
+                            Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED ;
+        }else {
+            return ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
     static boolean isGPSEnabled(Context context){
