@@ -131,6 +131,7 @@ public class LocationTrackerService extends Service {
     }
 
     private void notifyServiceDestroyEvent(){
+        AlarmHandler.getInstance(this).cancelRepeatingAlarm();
         if(mRequestingLocationUpdates){
             Intent intent = new Intent(this , LocationTrackerStatusReceiver.class);
             intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -150,6 +151,7 @@ public class LocationTrackerService extends Service {
     public void requestLocationUpdates() {
         Log.d(TAG, "Requesting location updates");
         try {
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,
                     mLocationCallback, Looper.myLooper());
         } catch (SecurityException unlikely) {

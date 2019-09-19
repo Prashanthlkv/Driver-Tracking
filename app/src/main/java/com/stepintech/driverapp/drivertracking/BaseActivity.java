@@ -43,9 +43,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             String[]manifestPermission;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
                 manifestPermission = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION ,
+                        Manifest.permission.ACCESS_FINE_LOCATION};
             }else {
-                manifestPermission = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION};
+                manifestPermission = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION ,
+                        Manifest.permission.ACCESS_FINE_LOCATION};
             }
             ActivityCompat.requestPermissions(this,
                     manifestPermission,
@@ -61,5 +63,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                             Manifest.permission.ACCESS_BACKGROUND_LOCATION},
                     PERMISSIONS_REQUEST_LOCATION);
         }
+    }
+
+    boolean isAllRequiredPermissionGranted(){
+        return Utils.isBackgroundLocationPermissionGranted(this)
+                && Utils.isGPSEnabled(this);
     }
 }

@@ -72,7 +72,7 @@ class AlarmHandler {
     /**
      * Method which cancels the registered alarm.
      */
-    private void cancelRepeatingAlarm(){
+     void cancelRepeatingAlarm(){
         AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         if(alarmManager != null && mPendingIntent != null){
             alarmManager.cancel(mPendingIntent);

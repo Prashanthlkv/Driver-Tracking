@@ -40,6 +40,7 @@ public class SplashActivity  extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG , "onResume");
         requestLocationPermission();
     }
 
@@ -64,8 +65,11 @@ public class SplashActivity  extends BaseActivity {
     }
 
     private void startLandingActivity(){
-        startActivity(LandingActivity.getIntent(this));
-        finish();
+        Log.d(TAG , "startLandingActivity");
+        if(isAllRequiredPermissionGranted()) {
+            startActivity(LandingActivity.getIntent(this));
+            finish();
+        }
     }
 
 }
