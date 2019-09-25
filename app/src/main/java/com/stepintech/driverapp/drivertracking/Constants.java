@@ -12,4 +12,8 @@ public final class Constants {
     static final int ALARM_INTERVAL = 1*60*1000; //5 mins
     //Permission constants
     static final int PERMISSIONS_REQUEST_LOCATION = 1001;
+    //Data sync constants
+     public static final int MIN_DATA_NEEDED_TO_SYNC = 10;
+     //API constants
+    public static final String URL_SEND_DRIVER_LOCATION = "http://ourwork.in/LoadEazyApp/Driver/driver_tracking1.php";
 }

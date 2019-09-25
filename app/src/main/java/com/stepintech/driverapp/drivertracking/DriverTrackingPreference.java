@@ -16,6 +16,8 @@ public class DriverTrackingPreference {
      */
     static class Key {
         static final String IS_TRACKING_ON = "is_tracking_on";
+        static final String KEY_DRIVER_ID = "driver_id";
+        static final String KEY_TRIP_CODE = "trip_code";
     }
 
     private DriverTrackingPreference(){

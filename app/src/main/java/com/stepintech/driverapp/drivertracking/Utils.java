@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -13,7 +15,12 @@ import androidx.core.content.ContextCompat;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
-final class Utils {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+
+public final class Utils {
 
     static boolean isBackgroundLocationPermissionGranted(Context context){
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -52,8 +59,43 @@ final class Utils {
         return true;
     }
 
+     static boolean isNetworkConnected(Context context) {
+        ConnectivityManager cm =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+         NetworkInfo activeNetwork = null;
+         if (cm != null) {
+             activeNetwork = cm.getActiveNetworkInfo();
+         }
+         return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+    }
+
     static void showToast(Context context , String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public static String getTimeFromTimeStamp(Long time) {
+        String format = "HH:mm:ss";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date dateTime = new Date(time);
+        return dateFormat.format(dateTime);
+    }
+
+    public static String getDateFromTimeStamp() {
+        String format = "dd-MMM-yyyy";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date dateTime = new Date(String.valueOf(Calendar.getInstance().getTime()));
+        return dateFormat.format(dateTime);
+    }
+
+    public static String getTimeTimeStamp() {
+        String format = "hh:mm a";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        Date dateTime = new Date(String.valueOf(Calendar.getInstance().getTime()));
+        return dateFormat.format(dateTime);
     }
 
 }

@@ -19,10 +19,14 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.stepintech.driverapp.drivertracking.data.api.ApiHelper;
+import com.stepintech.driverapp.drivertracking.data.locationmanager.LocationManager;
 
 import static com.stepintech.driverapp.drivertracking.Constants.FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS;
 import static com.stepintech.driverapp.drivertracking.Constants.LOCATION_TRACKER_RECEIVER_FILTER;
 import static com.stepintech.driverapp.drivertracking.Constants.UPDATE_INTERVAL_IN_MILLISECONDS;
+import static com.stepintech.driverapp.drivertracking.DriverTrackingPreference.Key.KEY_DRIVER_ID;
+import static com.stepintech.driverapp.drivertracking.DriverTrackingPreference.Key.KEY_TRIP_CODE;
 
 public class LocationTrackerService extends Service {
 
@@ -78,13 +82,24 @@ public class LocationTrackerService extends Service {
         if(action != null){
             switch (action){
                 case START_TRACKING:
+
                     requestLocationUpdates();
                     startForeground(NOTIFICATION_ID,
                             mNotificationHandler.getLocationTrackerServiceNotification());
+                    //Sync data to server
+                    if(Utils.isNetworkConnected(this)){
+                       ApiHelper.getInstance().sendLocationData(
+                                DriverTrackingPreference.getInstance(this).getString(KEY_DRIVER_ID , null) ,
+                                DriverTrackingPreference.getInstance(this).getString(KEY_TRIP_CODE , null)
+                        );
+                    }
+
                     break;
 
                 case STOP_TRACKING:
+
                     removeLocationUpdates();
+
                     break;
                 default:break;
             }
@@ -169,14 +184,15 @@ public class LocationTrackerService extends Service {
         Log.d(TAG, "Removing location updates");
         try {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
-            stopSelf();
         } catch (SecurityException unlikely) {
             //Utils.setRequestingLocationUpdates(this, true);
             Log.e(TAG, "Lost location permission. Could not remove updates. " + unlikely);
         }
         DriverTrackingPreference.getInstance(this).put(DriverTrackingPreference.Key.IS_TRACKING_ON ,
                 false);
+        LocationManager.getInstance().resetBuffer();
         mRequestingLocationUpdates = false;
+        stopSelf();
     }
 
     private void getLastLocation() {
@@ -202,6 +218,7 @@ public class LocationTrackerService extends Service {
         Log.i(TAG, "New location: " + location);
         mLocation = location;
         //Push data to server
+        LocationManager.getInstance().pushLocation(location);
 
 
     }
