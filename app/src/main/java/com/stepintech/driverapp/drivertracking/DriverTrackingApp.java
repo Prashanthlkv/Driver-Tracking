@@ -19,6 +19,5 @@ public class DriverTrackingApp extends Application {
         //Add static data to preference
         DriverTrackingPreference.getInstance(this).put(KEY_DRIVER_ID , "12");
         DriverTrackingPreference.getInstance(this).put(KEY_TRIP_CODE , "11");
-
     }
 }

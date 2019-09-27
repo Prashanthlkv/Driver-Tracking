@@ -1,6 +1,12 @@
 package com.stepintech.driverapp.drivertracking;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -65,6 +71,18 @@ public class SplashActivity  extends BaseActivity {
     }
 
     private void startLandingActivity(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Intent intent = new Intent();
+            String packageName = getPackageName();
+            PowerManager pm = (PowerManager)getSystemService(Context.POWER_SERVICE);
+            if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                intent.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                intent.setData(Uri.parse("package:" + packageName));
+                startActivity(intent);
+                return;
+            }
+        }
+
         Log.d(TAG , "startLandingActivity");
         if(isAllRequiredPermissionGranted()) {
             startActivity(LandingActivity.getIntent(this));
